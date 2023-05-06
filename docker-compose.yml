@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+    nginx:
+        image: nginx
+        restart: always
+        ports:
+            - 80:80
+        volumes:
+            - ./www:/var/www/html
+            - ./nginx-default.conf:/etc/nginx/conf.d/default.conf
+
+    php-fpm:
+        image: php-81
+        build: ./php
+
+        volumes:
+            - ./www:/var/www/html
+            - ./php/my.ini:/usr/local/etc/php/conf.d/my.ini
+    db:
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        volumes: 
+            - ./db:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: test_db
+        ports:
+            - 3306:3306
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        restart: always
+        environment:
+            PMA_HOST: db
+            PMA_USER: root
+            PMA_PASSWORD: root
+        ports:
+            - 8080:80
+
