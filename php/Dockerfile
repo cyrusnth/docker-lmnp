@@ -1,5 +1,5 @@
 FROM php:8.0.0-fpm-alpine
-
+RUN chown -r www-data:www-data /var/www
 RUN apk add --no-cache mysql-client msmtp perl wget procps shadow libzip libpng libjpeg-turbo libwebp freetype icu
 
 RUN apk add --no-cache --virtual build-essentials \
